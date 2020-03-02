@@ -1823,7 +1823,9 @@ function ckplayerConfig() {
         refer: this.CB['volumeBg'],
         grossValue: 'volume',
         fun: function (vol) {
-          thisTemp.changeVolume(vol * 0.01, true, true)
+          vol *= 0.01;
+          thisTemp.changeVolume(vol, true, true);
+          document.cookie = `volume=${vol};`;
         }
       };
       this.progressClick(volumeClickObj);
@@ -2669,8 +2671,10 @@ function ckplayerConfig() {
                 break;
             }
         }
-        thisTemp.newPlaybackrate(pra[i][1]);
-        thisTemp.sendJS('clickEvent', 'actionScript->newPlaybackrate')
+        var pr = pra[i][1];
+        thisTemp.newPlaybackrate(pr);
+        thisTemp.sendJS('clickEvent', 'actionScript->newPlaybackrate');
+        document.cookie = `pr=${pr};`;
       };
       this.addListenerInside('click', defClick, this.CB['playbackrate']);
       var defMouseOut = function (event) {
