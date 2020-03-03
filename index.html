@@ -11,23 +11,42 @@ body, html, video {background-color: #000;padding: 0;margin: 0;width: 100%;heigh
 <script type="text/javascript" src="ckplayerx/ckplayer.js"></script>
 <div class="video" style="width:100%;height:100%;"></div>
 <script type="text/javascript">
-function isIE() { //ie?
-	//return true;
-     if (!!window.ActiveXObject || "ActiveXObject" in window)
-            { return true; }
-     else
-            { return false; }
- }
- //alert(window.navigator.userAgent);
-	var vurl = window.location.href.split("v=")[1];
-	var videoObject = {
-		container: '.video',
-		variable: 'player',
-		autoplay:isIE()?true:false,
-		html5m3u8:isIE()?false:true,
-      	video: vurl
-	};
-	var player=new ckplayer(videoObject);
+function isIE() {
+    return (!!window.ActiveXObject || "ActiveXObject" in window)
+}
+var temp = window.location.href.split("?")[1].split("&");
+var params = {}
+for (var i=0; i<temp.length; i++) {
+    var _ = temp[i].split("="), k = _[0], v = _[1];
+    params[k] = v;
+}
+if (params["t"] != undefined) {
+    document.title = params["t"];
+}
+
+var temp = document.cookie.split("; ");
+var cookie = {}
+for (var i=0; i<temp.length; i++) {
+    var _ = temp[i].split("="), k = _[0], v = _[1];
+    cookie[k] = v;
+}
+
+var vurl = params["v"];
+var videoObject = {
+    container: '.video',
+    variable: 'player',
+    autoplay:(params["a"] == 1?true:isIE()),
+    html5m3u8:!isIE(),
+    video: vurl
+};
+var player=new ckplayer(videoObject);
+if (cookie["volume"] != undefined) {
+    player.changeVolume(cookie["volume"]);
+}
+if (cookie["pr"] != undefined) {
+    player.newPlaybackrate(cookie["pr"]);
+    player.sendJS('clickEvent', 'actionScript->newPlaybackrate');
+}
 </script>
 <div style="display:none"></div>
 </body>
