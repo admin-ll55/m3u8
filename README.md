@@ -2,4 +2,4 @@
 Play m3u8 with HTML
 
 # usage
-```https://admin-ll55.github.io/hls/?v=<m3u8 url>```
+```https://admin-ll55.github.io/m3u8/?v=<m3u8 url>```
