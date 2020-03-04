@@ -20,9 +20,7 @@ for (var i=0; i<temp.length; i++) {
     var _ = temp[i].split("="), k = _[0], v = _[1];
     params[k] = v;
 }
-if (params["t"] != undefined) {
-    document.title = params["t"];
-}
+document.title = document.title||params["t"];
 
 var temp = document.cookie.split("; ");
 var cookie = {}
@@ -44,8 +42,7 @@ if (cookie["volume"] != undefined) {
     player.changeVolume(cookie["volume"]);
 }
 if (cookie["pr"] != undefined) {
-    player.newPlaybackrate(cookie["pr"]);
-    player.sendJS('clickEvent', 'actionScript->newPlaybackrate');
+    player.changePlaybackrate(cookie["pr"]);
 }
 </script>
 <div style="display:none"></div>
