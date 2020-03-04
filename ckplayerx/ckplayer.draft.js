@@ -3741,6 +3741,9 @@ function ckplayerConfig() {
       }
     },
     videoPlay: function () {
+      if (cookie["pr"] != undefined) {
+          player.changePlaybackRate(cookie["pr"]);
+      }
       if (!this.loaded) {
         return
       }
