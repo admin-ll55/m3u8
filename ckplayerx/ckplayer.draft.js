@@ -2674,7 +2674,7 @@ function ckplayerConfig() {
         var pr = pra[i][1];
         thisTemp.newPlaybackrate(pr);
         thisTemp.sendJS('clickEvent', 'actionScript->newPlaybackrate');
-        document.cookie = `pr=${pr};`;
+        document.cookie = `pr=${i};`;
       };
       this.addListenerInside('click', defClick, this.CB['playbackrate']);
       var defMouseOut = function (event) {
