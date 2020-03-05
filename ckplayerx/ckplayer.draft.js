@@ -116,7 +116,7 @@ function ckplayerConfig() {
       playerID: '',
       container: '',
       variable: 'ckplayer',
-      volume: 0.8,
+      volume: (cookie["volume"] != undefined?cookie["volume"]:0.8),
       poster: '',
       autoplay: false,
       loop: false,
@@ -140,38 +140,38 @@ function ckplayerConfig() {
       crossdomain: '',
       unescape: false,
       mobileCkControls: false,
-      playbackrate: 1,
+      playbackrate: (cookie["pr"] != undefined?cookie["pr"]:1),
       debug: false
     };
     this.vars = {
     };
     this.language = {
-      volume: '音量：',
-      play: '点击播放',
-      pause: '点击暂停',
-      full: '点击全屏',
-      escFull: '退出全屏',
-      mute: '点击静音',
-      escMute: '取消静音',
-      front: '上一集',
-      next: '下一集',
-      definition: '点击选择清晰度',
-      playbackRate: '点击选择速度',
-      error: '加载出错'
+      volume: '',
+      play: 'Play',
+      pause: 'Pause',
+      full: 'Enter Fullscreen',
+      escFull: 'Exit Fullscreen',
+      mute: 'Mute',
+      escMute: 'Unmute',
+      front: 'Previous Episode',
+      next: 'Next Episode',
+      definition: 'Change Resolution',
+      playbackRate: 'Change Playback Rate',
+      error: 'Error!'
     };
     this.contextMenu = [
+      ['By admin-ll55 (Click to visit)',
+      'link',
+      'https://github.com/admin-ll55/'],
       ['ckplayer',
       'link',
-      'http://www.ckplayer.com'],
-      [
-        'version:X',
-        'default',
-        'line'
-      ]
+      'http://www.ckplayer.com']
     ];
     this.errorList = [
-      ['000',
-      'Object does not exist'],
+      [
+        '000',
+        'Object does not exist'
+      ],
       [
         '001',
         'Variables type is not a object'
@@ -214,28 +214,12 @@ function ckplayerConfig() {
       ]
     ];
     this.playbackRateArr = [
-      [0.5,
-      '0.5倍'],
-      [
-        1,
-        '正常'
-      ],
-      [
-        1.25,
-        '1.25倍'
-      ],
-      [
-        1.5,
-        '1.5倍'
-      ],
-      [
-        2,
-        '2倍速'
-      ],
-      [
-        4,
-        '4倍速'
-      ]
+      [0.5, '0.5x'],
+      [1, '1x'],
+      [1.25, '1.25x'],
+      [1.5, '1.5x'],
+      [2, '2x'],
+      [4, '4x']
     ];
     this.playbackRateDefault = 1;
     this.logo = '';
@@ -327,10 +311,10 @@ function ckplayerConfig() {
         this.eject(this.errorList[1])
       }
       this.vars = this.standardization(this.varsConfig, c);
-      if (!this.vars['mobileCkControls'] && this.isMobile()) {
+      /*if (!this.vars['mobileCkControls'] && this.isMobile()) {
         this.vars['flashplayer'] = false;
         this.showFace = false
-      }
+      }*/
       var videoString = this.vars['video'];
       if (!videoString) {
         this.eject(this.errorList[2]);
@@ -471,9 +455,9 @@ function ckplayerConfig() {
         this.html5Video = false;
         return
       }
-      if (this.isMobile()) {
+      /*if (this.isMobile()) {
         mobile = true
-      }
+      }*/
       for (var i = 0; i < va.length; i++) {
         var v = va[i];
         if (v) {
@@ -1142,7 +1126,7 @@ function ckplayerConfig() {
       }
       this.css([volumeID,
       volumeDbgID], {
-        width: '110px',
+        width: '70px',
         height: bHeight + 'px',
         overflow: 'hidden',
         float: 'right'
@@ -1152,7 +1136,7 @@ function ckplayerConfig() {
       });
       this.css([volumeBgID,
       volumeUpID], {
-        width: '100px',
+        width: '60px',
         height: '6px',
         overflow: 'hidden',
         borderRadius: '5px',
@@ -1825,7 +1809,6 @@ function ckplayerConfig() {
         fun: function (vol) {
           vol *= 0.01;
           thisTemp.changeVolume(vol, true, true);
-          document.cookie = `volume=${vol};`;
         }
       };
       this.progressClick(volumeClickObj);
@@ -1863,7 +1846,22 @@ function ckplayerConfig() {
         thisTemp.playOrPause()
       };
       clearTimerClick();
-      if (this.isClick) {
+      if (!thisTemp.isMobile()) {
+        if (this.isClick) {
+          this.isClick = false;
+          if (thisTemp.config['videoDbClick']) {
+            if (!this.full) {
+              thisTemp.fullScreen()
+            } else {
+              thisTemp.quitFullScreen()
+            }
+          }
+        } else {
+          this.isClick = true;
+          this.timerClick = new this.timer(300, timerClickFun, 1)
+        }
+      }
+      else {
         this.isClick = false;
         if (thisTemp.config['videoDbClick']) {
           if (!this.full) {
@@ -1872,7 +1870,6 @@ function ckplayerConfig() {
             thisTemp.quitFullScreen()
           }
         }
-      } else {
         this.isClick = true;
         this.timerClick = new this.timer(300, timerClickFun, 1)
       }
@@ -2674,7 +2671,6 @@ function ckplayerConfig() {
         var pr = pra[i][1];
         thisTemp.newPlaybackrate(pr);
         thisTemp.sendJS('clickEvent', 'actionScript->newPlaybackrate');
-        document.cookie = `pr=${i};`;
       };
       this.addListenerInside('click', defClick, this.CB['playbackrate']);
       var defMouseOut = function (event) {
@@ -2703,6 +2699,7 @@ function ckplayerConfig() {
       for (i = 0; i < vArr.length; i++) {
         var v = vArr[i];
         if (v[1] == title) {
+          document.cookie = `pr=${i};`;
           this.playbackRateDefault = i;
           this.V.playbackRate = v[0];
           if (this.showFace) {
@@ -3741,8 +3738,9 @@ function ckplayerConfig() {
       }
     },
     videoPlay: function () {
+      var thisTemp = this;
       if (cookie["pr"] != undefined) {
-          player.changePlaybackRate(cookie["pr"]);
+          thisTemp.changePlaybackRate(cookie["pr"]);
       }
       if (!this.loaded) {
         return
@@ -3782,6 +3780,7 @@ function ckplayerConfig() {
       }
     },
     changeVolume: function (vol, bg, button) {
+      document.cookie = `volume=${vol};`;
       if (this.loaded) {
         if (this.playerType == 'flashplayer') {
           this.V.changeVolume(time);
