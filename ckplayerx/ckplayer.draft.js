@@ -1014,7 +1014,7 @@ function ckplayerConfig() {
       });
       this.css(timeProgressBgID, {
         width: '100%',
-        height: '6px',
+        height: '12px',
         backgroundColor: '#3F3F3F',
         overflow: 'hidden',
         position: 'absolute',
@@ -1024,7 +1024,7 @@ function ckplayerConfig() {
       this.css([loadProgressID,
       timeProgressID], {
         width: '1px',
-        height: '6px',
+        height: '12px',
         position: 'absolute',
         bottom: '38px',
         top: '0px',
@@ -1037,7 +1037,7 @@ function ckplayerConfig() {
         height: '14px',
         overflow: 'hidden',
         position: 'absolute',
-        bottom: '34px',
+        bottom: '36px',
         cursor: 'pointer',
         zIndex: '92'
       });
@@ -1049,7 +1049,7 @@ function ckplayerConfig() {
         backgroundColor: bBgColor,
         cursor: 'pointer',
         position: 'absolute',
-        top: '0px',
+        top: '-1px',
         zIndex: '20'
       });
       this.css(timeBWID, {
