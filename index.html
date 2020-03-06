@@ -18,15 +18,15 @@ var temp = window.location.href.split("?")[1].split("&");
 var params = {}
 for (var i=0; i<temp.length; i++) {
     var _ = temp[i].split("="), k = _[0], v = _[1];
-    params[k] = v;
+    params[k] = decodeURIComponent(v);
 }
-document.title = document.title||params["t"];
+document.title = params["t"]||document.title;
 
 var temp = document.cookie.split("; ");
 var cookie = {}
 for (var i=0; i<temp.length; i++) {
     var _ = temp[i].split("="), k = _[0], v = _[1];
-    cookie[k] = v;
+    cookie[k] = decodeURIComponent(v);
 }
 
 var vurl = params["v"];
