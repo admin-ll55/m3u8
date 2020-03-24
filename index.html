@@ -20,9 +20,13 @@ for (var i=0; i<temp.length; i++) {
     var _ = temp[i].split("="), k = _[0], v = _[1];
     if (pks.indexOf(k) == -1) {
       params[pk] += "&"+decodeURIComponent(k)+(v == undefined?"":"="+decodeURIComponent(v));
-       continue;
+      continue;
     }
     params[k] = decodeURIComponent(v);
+    for (var j=2; j<_.length; j++) {
+    params[k] += "="+decodeURIComponent(_[j]);
+        pk = k;
+    }
     pk = k;
 }
 document.title = params["t"]||document.title;
