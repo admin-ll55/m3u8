@@ -38,7 +38,12 @@ for (var i=0; i<temp.length; i++) {
     cookie[k] = decodeURIComponent(v);
 }
 
-var vurl = params["v"];
+var vurl = params["v"].split("/");
+for (var i=3; i<vurl.length; i++) {
+  vurl[i] = encodeURIComponent(vurl[i]);
+}
+vurl = vurl.join("/");
+document.title = encodeURIComponent(params["t"])||document.title;
 var videoObject = {
     container: '.video',
     variable: 'player',
